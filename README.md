@@ -160,9 +160,9 @@ Không chỉ dừng lại ở các tính năng cắt ảnh cơ bản thông thư
 ## 🚀 Cài Đặt & Sử Dụng
 
 ### Lựa Chọn 1: Chạy file `.EXE` độc lập (Khuyên dùng cho người dùng cuối)
-1. Tải bản build mới nhất trong thư mục [dist/](dist/) hoặc tải từ tab [Releases](../../releases).
-2. Nhấp đúp vào **`MyshotAI.exe`** để chạy trực tiếp (Không cần cài Python hay môi trường phức tạp).
-3. Ứng dụng sẽ nằm gọn tại **Khay hệ thống (System Tray)** dưới góc phải màn hình. Nhấn <kbd>F3</kbd>, <kbd>F4</kbd> hoặc <kbd>F9</kbd> để kích hoạt bất kỳ lúc nào!
+1. Tải repository về hoặc tải trực tiếp file **[MyshotAI.exe](MyshotAI.exe)** ở thư mục gốc của dự án (hoặc từ tab [Releases](../../releases)).
+2. Nhấp đúp vào **`MyshotAI.exe`** để chạy trực tiếp ngay lập tức (Không cần cài đặt Python hay bất kỳ môi trường nào).
+3. Ứng dụng sẽ tự động thu nhỏ vào **Khay hệ thống (System Tray)** dưới góc phải màn hình. Nhấn <kbd>F3</kbd>, <kbd>F4</kbd> hoặc <kbd>F9</kbd> để kích hoạt bất kỳ lúc nào!
 
 ---
 
@@ -209,28 +209,43 @@ Hoặc bạn có thể nhấp đúp vào file script tiện ích:
    * `gemini-1.5-pro`: Suy luận logic chuyên sâu với các bài toán và tài liệu kỹ thuật phức tạp.
 5. Bấm nút **`⚡ Kiểm Tra Kết Nối`** ➔ Nhấn **`Lưu Cài Đặt`**.
 
-> 💡 *Ứng dụng cũng hỗ trợ chế độ Local Proxy / Web2API nếu bạn muốn sử dụng tài khoản Gemini cá nhân mà không dùng API key.*
-
 ---
 
 ## 📂 Cấu Trúc Dự Án
 
 ```text
-├── main.py                     # Entry point chính & Quản lý System Tray, Global Hotkeys
-├── overlay.py                  # Lớp phủ màn hình chụp ảnh, xử lý sự kiện chuột & vẽ canvas
-├── floating_toolbar.py         # Thanh công cụ nổi thông minh (Bút, Mũi tên, Đánh số bước...)
-├── canvas_elements.py          # Quản lý vector graphics & Thuật toán Auto Word-Wrap font fitting
-├── ai_copilot_card.py          # Thẻ giao diện AI Copilot (Raycast/Monica style, Markdown render)
-├── ai_engine.py                # Module kết nối Google Gemini Multimodal Vision API
-├── translation_card.py         # Thẻ hiển thị bản dịch nổi nhanh & đối chiếu song ngữ
-├── dual_compare_window.py      # Cửa sổ so sánh song song 2 ảnh & cuộn/zoom đồng bộ
-├── document_translator.py      # Xử lý dịch tài liệu & batch images
-├── ocr_translate.py            # Windows OCR Engine tích hợp & Google Translation
-├── settings_dialog.py          # Hộp thoại cài đặt phím tắt, đường dẫn, màu sắc & API
-├── about_dialog.py             # Giới thiệu thông tin phần mềm & nhà phát triển
-├── config.py                   # Quản lý lưu trữ file cấu hình người dùng (JSON)
+├── MyshotAI.exe                # File thực thi độc lập (Chạy ngay không cần Python)
+├── main.py                     # Entry point khởi chạy ứng dụng
+├── myshot_config.json          # File cấu hình tùy chỉnh người dùng
 ├── MyshotAI.spec               # File cấu hình đóng gói PyInstaller
-└── assets/                     # Thư mục hình ảnh, logo, banner & đồ họa
+├── cai_dat_thu_vien.bat        # Script tự động cài thư viện Python
+├── run.bat                     # Script khởi chạy nhanh
+├── Chay_Myshot.vbs             # Khởi chạy ngầm không hiện cửa sổ console
+├── assets/                     # Thư mục hình ảnh, logo, banner & đồ họa
+│   ├── hero_banner.jpg         # Banner giới thiệu phần mềm
+│   ├── feature_annotation.jpg  # Minh họa chụp ảnh & đánh số bước ❶ ❷ ❸
+│   ├── feature_copilot.jpg     # Minh họa thẻ trợ lý AI Copilot
+│   ├── team_logo.png           # Logo ứng dụng
+│   └── donate_qr.png           # Mã QR ủng hộ phát triển
+└── src/                        # Toàn bộ mã nguồn cốt lõi của phần mềm
+    ├── __init__.py
+    ├── main.py                 # Khởi tạo ứng dụng, System Tray & Global Hotkeys
+    ├── overlay.py              # Lớp phủ màn hình chụp ảnh, sự kiện chuột & canvas
+    ├── floating_toolbar.py     # Thanh công cụ nổi thông minh (Bút, Mũi tên, Đánh số bước...)
+    ├── canvas_elements.py      # Vector graphics & Thuật toán Auto Word-Wrap font fitting
+    ├── ai_copilot_card.py      # Thẻ giao diện AI Copilot (Raycast/Monica style, Markdown)
+    ├── ai_engine.py            # Kết nối Google Gemini Multimodal Vision API
+    ├── translation_card.py     # Thẻ hiển thị bản dịch nhanh & đối chiếu song ngữ
+    ├── dual_compare_window.py  # So sánh song song 2 ảnh & cuộn/zoom đồng bộ
+    ├── document_translator.py  # Xử lý dịch tài liệu & batch images
+    ├── document_translator_dialog.py # Hộp thoại dịch tài liệu
+    ├── ocr_translate.py        # Windows OCR Engine & Google Translation
+    ├── settings_dialog.py      # Cài đặt phím tắt, đường dẫn, màu sắc & API Key
+    ├── about_dialog.py         # Giới thiệu thông tin phần mềm & nhà phát triển
+    ├── config.py               # Quản lý cấu hình JSON
+    ├── infographic_renderer.py # Render infographic
+    ├── line_icons.py           # Bộ icon đồ họa vector
+    └── main_window.py          # Thanh điều khiển nhỏ trên màn hình
 ```
 
 ---
