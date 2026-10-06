@@ -26,3 +26,10 @@ cookie.txt.backup
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Android Build Outputs & APKs
+*.apk
+.gradle/
+**/build/
+local.properties
+ERROR_LOG.txt
