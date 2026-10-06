@@ -32,22 +32,18 @@ jobs:
           yes | sdkmanager --licenses || true
 
       - name: Build Debug APK with Gradle
-        id: gradle_build
         run: |
           cd EasyCap-Mobile
-          gradle assembleDebug --stacktrace --info 2>&1 | tee gradle_output.txt
+          gradle assembleDebug --no-daemon
 
-      - name: Print Gradle Error If Failed
-        if: failure()
+      - name: Locate and Prepare APK
         run: |
-          if [ -f EasyCap-Mobile/gradle_output.txt ]; then
-            echo "=== LAST 150 LINES OF BUILD OUTPUT ==="
-            tail -n 150 EasyCap-Mobile/gradle_output.txt
-          fi
-
-      - name: Copy & Rename APK
-        run: |
-          cp EasyCap-Mobile/app/build/outputs/apk/debug/app-debug.apk EasyCap-Mobile.apk
+          echo "=== Finding generated APKs ==="
+          find . -name "*.apk"
+          APK_FILE=$(find . -name "*.apk" | head -n 1)
+          echo "Found APK at: $APK_FILE"
+          cp "$APK_FILE" ./EasyCap-Mobile.apk
+          ls -la ./EasyCap-Mobile.apk
 
       - name: Upload APK to Artifacts
         uses: actions/upload-artifact@v4
