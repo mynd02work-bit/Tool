@@ -32,9 +32,20 @@ jobs:
           yes | sdkmanager --licenses || true
 
       - name: Build Debug APK with Gradle
+        id: build_step
         run: |
           cd EasyCap-Mobile
-          gradle :app:assembleDebug --no-daemon --stacktrace 2>&1 | tee ../build.log || (echo "=== GRADLE ERROR SUMMARY ===" && grep -C 4 -E "e: |error:|FAILED" ../build.log && echo "=== LAST 80 LINES ===" && tail -n 80 ../build.log && exit 1)
+          gradle :app:assembleDebug --no-daemon --stacktrace > ../build.log 2>&1
+
+      - name: Commit Error Log If Failed
+        if: failure()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          tail -n 120 build.log > ERROR_LOG.txt
+          git add ERROR_LOG.txt
+          git commit -m "ci: commit build error log [skip ci]"
+          git push
 
       - name: Locate and Prepare APK
         run: |
