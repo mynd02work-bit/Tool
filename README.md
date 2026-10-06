@@ -8,11 +8,11 @@
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
 [![GUI](https://img.shields.io/badge/GUI-PyQt6-41CD52?style=for-the-badge&logo=qt&logoColor=white)](https://riverbankcomputing.com/software/pyqt/)
 [![AI Engine](https://img.shields.io/badge/AI%20Engine-Gemini%202.0%20Flash-8E75B2?style=for-the-badge&logo=google&logoColor=white)](https://aistudio.google.com/)
-[![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](LICENSE)
+[![License](https://img.shields.io/badge/License-MIT-green.svg?style=for-the-badge)](EasyCap/ex/LICENSE)
 
 <br/>
 
-<img src="assets/hero_banner.jpg" alt="Myshot AI Hero Banner" width="100%" style="border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.3);" />
+<img src="EasyCap/assets/hero_banner.jpg" alt="Myshot AI Hero Banner" width="100%" style="border-radius: 12px; box-shadow: 0 8px 30px rgba(0,0,0,0.3);" />
 
 <br/>
 <br/>
@@ -50,7 +50,7 @@ Không chỉ dừng lại ở các tính năng cắt ảnh cơ bản thông thư
 ## ✨ Tính Năng Nổi Bật
 
 <div align="center">
-  <img src="assets/feature_annotation.jpg" alt="Annotation & In-place Translation" width="95%" style="border-radius: 10px;" />
+  <img src="EasyCap/assets/feature_annotation.jpg" alt="Annotation & In-place Translation" width="95%" style="border-radius: 10px;" />
 </div>
 
 ### 1. 🎨 Bộ Công Cụ Chú Thích Màn Hình Chuẩn Pro (Lightshot++)
@@ -74,7 +74,7 @@ Không chỉ dừng lại ở các tính năng cắt ảnh cơ bản thông thư
 ---
 
 <div align="center">
-  <img src="assets/feature_copilot.jpg" alt="AI Copilot Card" width="95%" style="border-radius: 10px;" />
+  <img src="EasyCap/assets/feature_copilot.jpg" alt="AI Copilot Card" width="95%" style="border-radius: 10px;" />
 </div>
 
 ### 3. 🤖 Trợ Lý AI Copilot Đa Phương Thức (Gemini Multimodal Vision)
@@ -160,7 +160,7 @@ Không chỉ dừng lại ở các tính năng cắt ảnh cơ bản thông thư
 ## 🚀 Cài Đặt & Sử Dụng
 
 ### Lựa Chọn 1: Chạy file `.EXE` độc lập (Khuyên dùng cho người dùng cuối)
-1. Tải repository về hoặc tải trực tiếp file **[MyshotAI.exe](MyshotAI.exe)** ở thư mục gốc của dự án (hoặc từ tab [Releases](../../releases)).
+1. Tải repository về hoặc tải trực tiếp file **[MyshotAI.exe](EasyCap/MyshotAI.exe)** trong thư mục `EasyCap/` (hoặc từ tab [Releases](../../releases)).
 2. Nhấp đúp vào **`MyshotAI.exe`** để chạy trực tiếp ngay lập tức (Không cần cài đặt Python hay bất kỳ môi trường nào).
 3. Ứng dụng sẽ tự động thu nhỏ vào **Khay hệ thống (System Tray)** dưới góc phải màn hình. Nhấn <kbd>F3</kbd>, <kbd>F4</kbd> hoặc <kbd>F9</kbd> để kích hoạt bất kỳ lúc nào!
 
@@ -176,20 +176,16 @@ Không chỉ dừng lại ở các tính năng cắt ảnh cơ bản thông thư
 ```bash
 # 1. Clone repository về máy
 git clone https://github.com/mynd02work-bit/Tool.git
-cd Tool
+cd Tool/EasyCap/ex
 
-# 2. Tạo môi trường ảo (Khuyến nghị)
-python -m venv venv
-venv\Scripts\activate
-
-# 3. Cài đặt các thư viện phụ thuộc
+# 2. Cài đặt các thư viện phụ thuộc
 pip install PyQt6 Pillow requests mss keyboard winocr
 
-# 4. Khởi chạy ứng dụng
+# 3. Khởi chạy ứng dụng
 python main.py
 ```
 
-Hoặc bạn có thể nhấp đúp vào file script tiện ích:
+Hoặc bạn có thể nhấp đúp vào file script tiện ích trong thư mục `EasyCap/ex/`:
 * `cai_dat_thu_vien.bat` — Tự động kiểm tra và cài đặt toàn bộ thư viện.
 * `run.bat` — Khởi chạy ứng dụng nhanh.
 * `Chay_Myshot.vbs` — Khởi chạy ngầm không hiển thị cửa sổ console đen.
@@ -214,38 +210,44 @@ Hoặc bạn có thể nhấp đúp vào file script tiện ích:
 ## 📂 Cấu Trúc Dự Án
 
 ```text
-├── MyshotAI.exe                # File thực thi độc lập (Chạy ngay không cần Python)
-├── main.py                     # Entry point khởi chạy ứng dụng
-├── myshot_config.json          # File cấu hình tùy chỉnh người dùng
-├── MyshotAI.spec               # File cấu hình đóng gói PyInstaller
-├── cai_dat_thu_vien.bat        # Script tự động cài thư viện Python
-├── run.bat                     # Script khởi chạy nhanh
-├── Chay_Myshot.vbs             # Khởi chạy ngầm không hiện cửa sổ console
-├── assets/                     # Thư mục hình ảnh, logo, banner & đồ họa
-│   ├── hero_banner.jpg         # Banner giới thiệu phần mềm
-│   ├── feature_annotation.jpg  # Minh họa chụp ảnh & đánh số bước ❶ ❷ ❸
-│   ├── feature_copilot.jpg     # Minh họa thẻ trợ lý AI Copilot
-│   ├── team_logo.png           # Logo ứng dụng
-│   └── donate_qr.png           # Mã QR ủng hộ phát triển
-└── src/                        # Toàn bộ mã nguồn cốt lõi của phần mềm
-    ├── __init__.py
-    ├── main.py                 # Khởi tạo ứng dụng, System Tray & Global Hotkeys
-    ├── overlay.py              # Lớp phủ màn hình chụp ảnh, sự kiện chuột & canvas
-    ├── floating_toolbar.py     # Thanh công cụ nổi thông minh (Bút, Mũi tên, Đánh số bước...)
-    ├── canvas_elements.py      # Vector graphics & Thuật toán Auto Word-Wrap font fitting
-    ├── ai_copilot_card.py      # Thẻ giao diện AI Copilot (Raycast/Monica style, Markdown)
-    ├── ai_engine.py            # Kết nối Google Gemini Multimodal Vision API
-    ├── translation_card.py     # Thẻ hiển thị bản dịch nhanh & đối chiếu song ngữ
-    ├── dual_compare_window.py  # So sánh song song 2 ảnh & cuộn/zoom đồng bộ
-    ├── document_translator.py  # Xử lý dịch tài liệu & batch images
-    ├── document_translator_dialog.py # Hộp thoại dịch tài liệu
-    ├── ocr_translate.py        # Windows OCR Engine & Google Translation
-    ├── settings_dialog.py      # Cài đặt phím tắt, đường dẫn, màu sắc & API Key
-    ├── about_dialog.py         # Giới thiệu thông tin phần mềm & nhà phát triển
-    ├── config.py               # Quản lý cấu hình JSON
-    ├── infographic_renderer.py # Render infographic
-    ├── line_icons.py           # Bộ icon đồ họa vector
-    └── main_window.py          # Thanh điều khiển nhỏ trên màn hình
+├── README.md                   # Tài liệu giới thiệu & hướng dẫn chi tiết
+├── .gitignore                  # Cấu hình bỏ qua tệp tạm và bảo mật
+└── EasyCap/                    # Thư mục chính của ứng dụng
+    ├── MyshotAI.exe            # File thực thi độc lập (Chạy trực tiếp không cần Python)
+    ├── assets/                 # Banner, mockup AI Copilot & logo
+    │   ├── hero_banner.jpg
+    │   ├── feature_annotation.jpg
+    │   ├── feature_copilot.jpg
+    │   ├── team_logo.png
+    │   └── donate_qr.png
+    ├── ex/                     # Các file script thực thi & cấu hình phụ trợ
+    │   ├── main.py             # Entry point khởi chạy
+    │   ├── myshot_config.json  # File cấu hình ứng dụng
+    │   ├── MyshotAI.spec       # File cấu hình đóng gói PyInstaller
+    │   ├── cai_dat_thu_vien.bat # Script tự động cài thư viện Python
+    │   ├── run.bat             # Script khởi chạy nhanh
+    │   ├── Chay_Myshot.vbs     # Khởi chạy ngầm không hiện console
+    │   ├── app_icon.ico        # Icon ứng dụng
+    │   └── LICENSE             # Giấy phép MIT
+    └── src/                    # Toàn bộ mã nguồn phần mềm
+        ├── __init__.py
+        ├── main.py             # Khởi tạo ứng dụng & Hotkeys
+        ├── overlay.py          # Lớp phủ màn hình chụp ảnh & canvas
+        ├── floating_toolbar.py # Thanh công cụ nổi thông minh (Bút, Mũi tên, Đánh số bước...)
+        ├── canvas_elements.py  # Vector graphics & Auto Word-Wrap font fitting
+        ├── ai_copilot_card.py  # Thẻ giao diện AI Copilot (Raycast/Monica style, Markdown)
+        ├── ai_engine.py        # Kết nối Google Gemini Multimodal Vision API
+        ├── translation_card.py # Thẻ hiển thị bản dịch nhanh & đối chiếu song ngữ
+        ├── dual_compare_window.py # So sánh song song 2 ảnh & cuộn/zoom đồng bộ
+        ├── document_translator.py # Xử lý dịch tài liệu & batch images
+        ├── document_translator_dialog.py # Hộp thoại dịch tài liệu
+        ├── ocr_translate.py    # Windows OCR Engine & Google Translation
+        ├── settings_dialog.py  # Cài đặt phím tắt, đường dẫn, màu sắc & API Key
+        ├── about_dialog.py     # Giới thiệu thông tin phần mềm & nhà phát triển
+        ├── config.py           # Quản lý cấu hình JSON
+        ├── infographic_renderer.py # Render infographic
+        ├── line_icons.py       # Bộ icon đồ họa vector
+        └── main_window.py      # Thanh điều khiển nhỏ trên màn hình
 ```
 
 ---
@@ -270,7 +272,7 @@ Dự án được xây dựng với mục tiêu mang đến trải nghiệm ch�
 Nếu thấy phần mềm hữu ích, hãy tặng cho dự án **1 Star ⭐ trên GitHub** để ủng hộ tác giả nhé!
 
 <div align="center">
-  <img src="assets/donate_qr.png" alt="Donate QR" width="220" style="border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);" />
+  <img src="EasyCap/assets/donate_qr.png" alt="Donate QR" width="220" style="border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.15);" />
   <p><i>Cảm ơn mọi sự ủng hộ và đồng hành của bạn!</i></p>
 </div>
 
@@ -278,7 +280,7 @@ Nếu thấy phần mềm hữu ích, hãy tặng cho dự án **1 Star ⭐ trê
 
 ## 📄 Bản Quyền (License)
 
-Dự án được phát hành theo giấy phép [MIT License](LICENSE). Bạn hoàn toàn có thể tự do sử dụng, chỉnh sửa và phân phối cho mục đích cá nhân hoặc thương mại.
+Dự án được phát hành theo giấy phép [MIT License](EasyCap/ex/LICENSE). Bạn hoàn toàn có thể tự do sử dụng, chỉnh sửa và phân phối cho mục đích cá nhân hoặc thương mại.
 
 <div align="center">
   <b>Myshot AI</b> — <i>Crafted with ❤️ for high productivity and seamless AI workflow.</i>
