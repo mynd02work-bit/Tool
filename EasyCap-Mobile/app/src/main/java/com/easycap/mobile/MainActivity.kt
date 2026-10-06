@@ -276,7 +276,7 @@ fun MainScreen(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(Icons.Default.CloudDownload, contentDescription = null, tint = Color(0xFF00CEC9))
+                            Icon(Icons.Default.Refresh, contentDescription = null, tint = Color(0xFF00CEC9))
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
                                 "Đồng Bộ & Cập Nhật OTA",
@@ -353,7 +353,7 @@ fun MainScreen(
 
                                 if (downloadProgress >= 0) {
                                     LinearProgressIndicator(
-                                        progress = downloadProgress / 100f,
+                                        progress = { downloadProgress / 100f },
                                         modifier = Modifier.fillMaxWidth(),
                                         color = Color(0xFF00CEC9),
                                         trackColor = Color(0xFF2D3045)
@@ -403,7 +403,7 @@ fun MainScreen(
             ) {
                 Column(modifier = Modifier.padding(20.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Default.Key, contentDescription = null, tint = Color(0xFFA29BFE))
+                        Icon(Icons.Default.Lock, contentDescription = null, tint = Color(0xFFA29BFE))
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
                             "Google Gemini API Key",
@@ -478,7 +478,7 @@ fun MainScreen(
 @Composable
 fun GuideItem(title: String, desc: String) {
     Row(modifier = Modifier.padding(vertical = 6.dp)) {
-        Icon(Icons.Default.CheckCircle, contentDescription = null, tint = Color(0xFF00CEC9), modifier = Modifier.size(18.dp))
+        Icon(Icons.Default.Check, contentDescription = null, tint = Color(0xFF00CEC9), modifier = Modifier.size(18.dp))
         Spacer(modifier = Modifier.width(10.dp))
         Column {
             Text(title, color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.SemiBold)

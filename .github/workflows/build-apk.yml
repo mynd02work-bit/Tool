@@ -35,14 +35,16 @@ jobs:
         id: build_step
         run: |
           cd EasyCap-Mobile
-          gradle :app:assembleDebug --no-daemon --stacktrace > ../build.log 2>&1
+          gradle :app:assembleDebug --no-daemon --info --stacktrace 2>&1 | tee ../build.log
 
       - name: Commit Error Log If Failed
         if: failure()
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          tail -n 120 build.log > ERROR_LOG.txt
+          grep -E "(^e: |^error: |Compilation error|BUILD FAILED)" build.log > ERROR_LOG.txt || true
+          echo "=== RECENT LOG LINES ===" >> ERROR_LOG.txt
+          tail -n 150 build.log >> ERROR_LOG.txt
           git add ERROR_LOG.txt
           git commit -m "ci: commit build error log [skip ci]"
           git push

@@ -80,7 +80,7 @@ fun CopilotCardView(
                 contentColor = Color(0xFFA29BFE),
                 edgePadding = 0.dp
             ) {
-                CopilotTab.values().forEach { tab ->
+                CopilotTab.entries.forEach { tab ->
                     Tab(
                         selected = selectedTab == tab,
                         onClick = { onTabSelected(tab) },

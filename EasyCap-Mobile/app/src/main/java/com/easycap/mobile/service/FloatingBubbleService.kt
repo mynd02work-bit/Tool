@@ -12,6 +12,9 @@ import android.os.IBinder
 import android.view.*
 import android.widget.ImageView
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.core.app.NotificationCompat
 import com.easycap.mobile.MainActivity
 import com.easycap.mobile.R
@@ -68,7 +71,12 @@ class FloatingBubbleService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val resultCode = intent?.getIntExtra(EXTRA_RESULT_CODE, Activity.RESULT_CANCELED) ?: Activity.RESULT_CANCELED
-        val resultData = intent?.getParcelableExtra<Intent>(EXTRA_RESULT_DATA)
+        val resultData = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent?.getParcelableExtra(EXTRA_RESULT_DATA, Intent::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent?.getParcelableExtra<Intent>(EXTRA_RESULT_DATA)
+        }
 
         if (resultCode == Activity.RESULT_OK && resultData != null) {
             val projectionManager = getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
