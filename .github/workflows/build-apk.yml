@@ -22,7 +22,7 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Set up Gradle
+      - name: Set up Gradle 8.10.2
         uses: gradle/actions/setup-gradle@v3
         with:
           gradle-version: '8.10.2'
@@ -32,9 +32,18 @@ jobs:
           yes | sdkmanager --licenses || true
 
       - name: Build Debug APK with Gradle
+        id: gradle_build
         run: |
           cd EasyCap-Mobile
-          gradle assembleDebug --no-daemon
+          gradle assembleDebug --stacktrace --info 2>&1 | tee gradle_output.txt
+
+      - name: Print Gradle Error If Failed
+        if: failure()
+        run: |
+          if [ -f EasyCap-Mobile/gradle_output.txt ]; then
+            echo "=== LAST 150 LINES OF BUILD OUTPUT ==="
+            tail -n 150 EasyCap-Mobile/gradle_output.txt
+          fi
 
       - name: Copy & Rename APK
         run: |
