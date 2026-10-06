@@ -22,29 +22,37 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Set up Gradle
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Set up Gradle 8.10.2
         uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.10.2'
 
       - name: Build Debug APK with Gradle
         run: |
           cd EasyCap-Mobile
-          gradle assembleDebug --no-daemon
+          gradle assembleDebug --no-daemon --stacktrace
 
-      - name: Rename APK
+      - name: Copy & Rename APK
         run: |
-          mv EasyCap-Mobile/app/build/outputs/apk/debug/app-debug.apk EasyCap-Mobile.apk
+          cp EasyCap-Mobile/app/build/outputs/apk/debug/app-debug.apk EasyCap-Mobile.apk
 
-      - name: Upload APK Artifact
+      - name: Upload APK to Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: EasyCap-Mobile.apk
+          name: EasyCap-Mobile-APK
           path: EasyCap-Mobile.apk
 
       - name: Publish GitHub Release with APK
         uses: softprops/action-gh-release@v2
+        continue-on-error: true
         with:
           tag_name: mobile-v1.0.0
           name: EasyCap Mobile v1.0.0 (Bản Cài Đặt Android APK)
+          draft: false
+          prerelease: false
           body: |
             ### 📱 EasyCap Mobile - Trợ Lý Dịch Màn Hình 1:1 & AI Copilot
             - **Tải file:** Nhấp vào `EasyCap-Mobile.apk` bên dưới để tải và cài đặt trực tiếp lên điện thoại Android.
