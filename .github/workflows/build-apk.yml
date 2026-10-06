@@ -34,13 +34,13 @@ jobs:
       - name: Build Debug APK with Gradle
         run: |
           cd EasyCap-Mobile
-          gradle :app:assembleDebug --no-daemon --stacktrace
+          gradle :app:assembleDebug --no-daemon --stacktrace 2>&1 | tee ../build.log || (echo "=== GRADLE ERROR SUMMARY ===" && grep -C 4 -E "e: |error:|FAILED" ../build.log && echo "=== LAST 80 LINES ===" && tail -n 80 ../build.log && exit 1)
 
       - name: Locate and Prepare APK
         run: |
           echo "=== Check APK output directory ==="
-          ls -R EasyCap-Mobile/app/build/outputs/
-          cp EasyCap-Mobile/app/build/outputs/apk/debug/app-debug.apk ./EasyCap-Mobile.apk
+          find EasyCap-Mobile/app/build/ -name "*.apk"
+          cp $(find EasyCap-Mobile/app/build/ -name "*.apk" | head -n 1) ./EasyCap-Mobile.apk
           ls -lh ./EasyCap-Mobile.apk
 
       - name: Upload APK to Artifacts
@@ -60,11 +60,6 @@ jobs:
           body: |
             ### 📱 EasyCap Mobile - Trợ Lý Dịch Màn Hình 1:1 & AI Copilot
             - **Tải file:** Nhấp vào `EasyCap-Mobile.apk` bên dưới để tải và cài đặt trực tiếp lên điện thoại Android.
-            - **Tính năng nổi bật:**
-              - 🫧 Bóng nổi thông minh đè lên mọi ứng dụng (Manga, Game, PDF, MXH).
-              - 🔤 Dịch đè 1:1 tức thì với Google ML Kit OCR offline.
-              - 🤖 Trợ lý AI Copilot giải bài, giải mã lỗi code và tóm tắt qua Gemini 2.0 Flash.
-              - 🔄 Tự động đồng bộ cập nhật OTA từ máy tính sang điện thoại.
           files: EasyCap-Mobile.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
