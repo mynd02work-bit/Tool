@@ -1,0 +1,28 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# PyInstaller temporary build artifacts
+build/
+*.spec.bak
+
+# Secrets & Sessions & Credentials (Bảo mật tài khoản Google & API Keys)
+*cookie*.txt*
+*cookie*.json*
+cookie.txt.backup
+*.env
+*.env.*
+*.pem
+*.key
+
+# Temporary / Log files
+*.log
+*.tmp
+
+# OS / IDE files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
