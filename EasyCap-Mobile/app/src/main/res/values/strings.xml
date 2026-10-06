@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">EasyCap Mobile</string>
+    <string name="channel_name">Dịch vụ EasyCap chạy ngầm</string>
+    <string name="channel_desc">Hiển thị thông báo duy trì bóng nổi EasyCap trên màn hình</string>
+    <string name="notification_title">EasyCap đang hoạt động</string>
+    <string name="notification_text">Chạm vào bóng nổi trên màn hình để dịch hoặc gọi AI Copilot</string>
+</resources>

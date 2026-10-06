@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary_purple">#6C5CE7</color>
+    <color name="primary_gradient">#A29BFE</color>
+    <color name="accent_cyan">#00CEC9</color>
+    <color name="dark_bg">#12131C</color>
+    <color name="card_surface">#1E202F</color>
+    <color name="white">#FFFFFF</color>
+</resources>

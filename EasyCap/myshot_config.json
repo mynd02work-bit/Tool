@@ -1,0 +1,23 @@
+{
+    "hotkey_capture": "f1",
+    "hotkey_translate": "f4",
+    "hotkey_ai": "f9",
+    "save_dir": "C:\\Users\\ngodi\\Downloads",
+    "save_format": "PNG",
+    "default_color": "#FF3344",
+    "default_pen_width": 3,
+    "default_font_size": 16,
+    "highlight_opacity": 90,
+    "ocr_lang": "en-US",
+    "target_lang": "ja",
+    "auto_copy_after_save": true,
+    "sound_enabled": true,
+    "gemini_api_key": "",
+    "gemini_model": "gemini-flash-lite-latest",
+    "ai_provider": "official",
+    "local_proxy_url": "http://127.0.0.1:8000/v1",
+    "use_ai_for_default_translate": false,
+    "show_floating_bar": false,
+    "auto_start": true,
+    "default_hide_capture_toolbar": false
+}
