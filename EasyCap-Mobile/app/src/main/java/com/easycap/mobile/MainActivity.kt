@@ -18,10 +18,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.Key
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.Stop
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -33,10 +30,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.easycap.mobile.data.AppPreferences
 import com.easycap.mobile.service.FloatingBubbleService
+import com.easycap.mobile.updater.AppUpdater
+import com.easycap.mobile.updater.UpdateInfo
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var preferences: AppPreferences
+    private lateinit var appUpdater: AppUpdater
+    private val currentVersionCode = 1
+    private val currentVersionName = "1.0.0"
+
     private val projectionManager by lazy {
         getSystemService(Context.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
     }
@@ -72,6 +76,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         preferences = AppPreferences(this)
+        appUpdater = AppUpdater(this)
         isServiceRunningState.value = FloatingBubbleService.isRunning
 
         setContent {
@@ -79,6 +84,9 @@ class MainActivity : ComponentActivity() {
                 MainScreen(
                     isRunning = isServiceRunningState.value,
                     apiKey = preferences.geminiApiKey,
+                    currentVersionName = currentVersionName,
+                    currentVersionCode = currentVersionCode,
+                    appUpdater = appUpdater,
                     onToggleService = { enable ->
                         if (enable) {
                             requestPermissionsAndStart()
@@ -132,10 +140,29 @@ fun EasyCapTheme(content: @Composable () -> Unit) {
 fun MainScreen(
     isRunning: Boolean,
     apiKey: String,
+    currentVersionName: String,
+    currentVersionCode: Int,
+    appUpdater: AppUpdater,
     onToggleService: (Boolean) -> Unit,
     onSaveApiKey: (String) -> Unit
 ) {
     var apiKeyInput by remember { mutableStateOf(apiKey) }
+    val coroutineScope = rememberCoroutineScope()
+
+    var isCheckingUpdate by remember { mutableStateOf(false) }
+    var availableUpdate by remember { mutableStateOf<UpdateInfo?>(null) }
+    var downloadProgress by remember { mutableStateOf(-1) }
+    var updateStatusMessage by remember { mutableStateOf("") }
+
+    // Tự động kiểm tra bản cập nhật mới trên GitHub khi khởi chạy app
+    LaunchedEffect(Unit) {
+        val result = appUpdater.checkForUpdates(currentVersionCode)
+        result.onSuccess { update ->
+            if (update != null) {
+                availableUpdate = update
+            }
+        }
+    }
 
     Scaffold(
         containerColor = Color(0xFF12131C)
@@ -160,22 +187,40 @@ fun MainScreen(
                     .padding(24.dp)
             ) {
                 Column {
-                    Text(
-                        "🚀 EasyCap Mobile",
-                        color = Color.White,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold
-                    )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            "🚀 EasyCap Mobile",
+                            color = Color.White,
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold
+                        )
+                        Surface(
+                            shape = RoundedCornerShape(12.dp),
+                            color = Color.White.copy(alpha = 0.2f)
+                        ) {
+                            Text(
+                                "v$currentVersionName",
+                                color = Color.White,
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Bold,
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 4.dp)
+                            )
+                        }
+                    }
                     Spacer(modifier = Modifier.height(6.dp))
                     Text(
                         "Trợ lý dịch màn hình 1:1 & AI Copilot bóng nổi thông minh",
                         color = Color(0xFFE2E8F0),
-                        fontSize = 14.sp
+                        fontSize = 13.sp
                     )
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(18.dp))
 
             // Service Toggle Card
             Card(
@@ -216,7 +261,139 @@ fun MainScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(18.dp))
+
+            // OTA Auto Update Card
+            Card(
+                shape = RoundedCornerShape(20.dp),
+                colors = CardDefaults.cardColors(containerColor = Color(0xFF1E202F)),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Column(modifier = Modifier.padding(20.dp)) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(Icons.Default.CloudDownload, contentDescription = null, tint = Color(0xFF00CEC9))
+                            Spacer(modifier = Modifier.width(8.dp))
+                            Text(
+                                "Đồng Bộ & Cập Nhật OTA",
+                                color = Color.White,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Bold
+                            )
+                        }
+
+                        IconButton(
+                            onClick = {
+                                isCheckingUpdate = true
+                                updateStatusMessage = "Đang kiểm tra máy chủ GitHub..."
+                                coroutineScope.launch {
+                                    val result = appUpdater.checkForUpdates(currentVersionCode)
+                                    isCheckingUpdate = false
+                                    result.onSuccess { update ->
+                                        if (update != null) {
+                                            availableUpdate = update
+                                            updateStatusMessage = "Đã có bản cập nhật v${update.versionName}!"
+                                        } else {
+                                            updateStatusMessage = "Ứng dụng đang ở bản mới nhất (v$currentVersionName)."
+                                        }
+                                    }.onFailure { err ->
+                                        updateStatusMessage = "Kiểm tra thất bại: ${err.message}"
+                                    }
+                                }
+                            }
+                        ) {
+                            if (isCheckingUpdate) {
+                                CircularProgressIndicator(
+                                    modifier = Modifier.size(20.dp),
+                                    color = Color(0xFF00CEC9),
+                                    strokeWidth = 2.dp
+                                )
+                            } else {
+                                Icon(Icons.Default.Refresh, contentDescription = "Check update", tint = Color.LightGray)
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        if (updateStatusMessage.isNotBlank()) updateStatusMessage
+                        else "Khi bạn cập nhật phiên bản mới trên máy tính, điện thoại sẽ tự động phát hiện và cập nhật ngay lập tức.",
+                        color = Color(0xFF94A3B8),
+                        fontSize = 12.sp,
+                        lineHeight = 18.sp
+                    )
+
+                    if (availableUpdate != null) {
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Surface(
+                            shape = RoundedCornerShape(14.dp),
+                            color = Color(0xFF151622),
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Column(modifier = Modifier.padding(14.dp)) {
+                                Text(
+                                    "✨ Bản Mới: v${availableUpdate?.versionName}",
+                                    color = Color(0xFF00CEC9),
+                                    fontWeight = FontWeight.Bold,
+                                    fontSize = 14.sp
+                                )
+                                Spacer(modifier = Modifier.height(4.dp))
+                                Text(
+                                    availableUpdate?.releaseNotes ?: "",
+                                    color = Color(0xFFCBD5E1),
+                                    fontSize = 12.sp,
+                                    lineHeight = 18.sp
+                                )
+
+                                Spacer(modifier = Modifier.height(10.dp))
+
+                                if (downloadProgress >= 0) {
+                                    LinearProgressIndicator(
+                                        progress = downloadProgress / 100f,
+                                        modifier = Modifier.fillMaxWidth(),
+                                        color = Color(0xFF00CEC9),
+                                        trackColor = Color(0xFF2D3045)
+                                    )
+                                    Spacer(modifier = Modifier.height(4.dp))
+                                    Text(
+                                        "Đang tải bản cập nhật: $downloadProgress%",
+                                        color = Color.LightGray,
+                                        fontSize = 11.sp
+                                    )
+                                } else {
+                                    Button(
+                                        onClick = {
+                                            availableUpdate?.let { update ->
+                                                downloadProgress = 0
+                                                coroutineScope.launch {
+                                                    val res = appUpdater.downloadAndInstall(update) { p ->
+                                                        downloadProgress = p
+                                                    }
+                                                    res.onFailure {
+                                                        downloadProgress = -1
+                                                        updateStatusMessage = "Lỗi tải về: ${it.message}"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        shape = RoundedCornerShape(10.dp),
+                                        colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF00CEC9)),
+                                        modifier = Modifier.fillMaxWidth()
+                                    ) {
+                                        Text("Cập Nhật Ngay Lập Tức", color = Color(0xFF12131C), fontWeight = FontWeight.Bold)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(18.dp))
 
             // Gemini API Setup Card
             Card(
@@ -238,7 +415,7 @@ fun MainScreen(
 
                     Spacer(modifier = Modifier.height(10.dp))
                     Text(
-                        "Để sử dụng AI Copilot giải bài, tóm tắt và phân tích ảnh, hãy nhập Gemini API Key miễn phí từ Google AI Studio.",
+                        "Dán API Key từ Google AI Studio để sử dụng Trợ lý AI Copilot giải bài, tóm tắt và phân tích code.",
                         color = Color(0xFF94A3B8),
                         fontSize = 12.sp,
                         lineHeight = 18.sp
@@ -276,7 +453,7 @@ fun MainScreen(
                 }
             }
 
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(18.dp))
 
             // Quick Usage Guide
             Card(
